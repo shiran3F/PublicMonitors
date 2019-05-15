@@ -78,7 +78,7 @@ class PublicScan:
         fl.close()
 
     def checkip(self, ip):
-        p = re.compile('^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$')
+        p = re.compile('^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)(?:/([0-9]|[1-2][0-9]|3[0-2]))?$')
         if p.match(ip):
             return True
         else:
