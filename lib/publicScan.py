@@ -34,27 +34,27 @@ class PublicScan:
     def Public_nmap(self, ipinfo=None):
         for ip_port in self.measscan_result if not ipinfo else ipinfo:
             if ipinfo: ip_port = re.split('[:]', ip_port)
-            if ip_port[0] in self.ip_list:
-                scanner = nmap.PortScanner()
-                port = ip_port[1] if isinstance(ip_port[1], int) else int(ip_port[1])
-                scanner.scan(hosts=ip_port[0], arguments='-sS -T4 -p %d' % port)
-                for targethost in scanner.all_hosts():
-                    for proto in scanner[targethost].all_protocols():
-                        lport = scanner[targethost][proto].keys()
-                        lport.sort()
-                        for port in lport:
-                            if scanner[targethost][proto][port]['state'] == 'open':
-                                temp = {}
-                                temp['ip'] = targethost
-                                temp['port'] = port
-                                temp['server'] = scanner[targethost][proto][port]['name']
-                                temp['state'] = 'open'
-                                temp['protocol'] = proto
-                                temp['product'] = scanner[targethost][proto][port]['product']
-                                temp['product_version'] = scanner[targethost][proto][port]['version']
-                                temp['product_extrainfo'] = scanner[targethost][proto][port]['extrainfo']
-                                temp['reason'] = scanner[targethost][proto][port]['reason']
-                                self.result_info.append("%s:%s:%s" % (temp['ip'], temp['port'], temp['server']))
+            # if ip_port[0] in self.ip_list:
+            scanner = nmap.PortScanner()
+            port = ip_port[1] if isinstance(ip_port[1], int) else int(ip_port[1])
+            scanner.scan(hosts=ip_port[0], arguments='-sS -T4 -p %d' % port)
+            for targethost in scanner.all_hosts():
+                for proto in scanner[targethost].all_protocols():
+                    lport = scanner[targethost][proto].keys()
+                    lport.sort()
+                    for port in lport:
+                        if scanner[targethost][proto][port]['state'] == 'open':
+                            temp = {}
+                            temp['ip'] = targethost
+                            temp['port'] = port
+                            temp['server'] = scanner[targethost][proto][port]['name']
+                            temp['state'] = 'open'
+                            temp['protocol'] = proto
+                            temp['product'] = scanner[targethost][proto][port]['product']
+                            temp['product_version'] = scanner[targethost][proto][port]['version']
+                            temp['product_extrainfo'] = scanner[targethost][proto][port]['extrainfo']
+                            temp['reason'] = scanner[targethost][proto][port]['reason']
+                            self.result_info.append("%s:%s:%s" % (temp['ip'], temp['port'], temp['server']))
 
     def diff(self):
         if os.path.exists('out/Result.txt'):
